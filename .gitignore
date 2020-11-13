@@ -30,3 +30,11 @@
 *.exe
 *.out
 *.app
+tsunami/build/tsunami
+
+# make and cmake files
+Makefile
+*.cmake
+install_manifest.txt
+CMakeCache.txt
+CMakeFiles
