@@ -25,6 +25,18 @@ module mod_diff
 
     end function diff
 
+    pure function diff_centred_periodic(x) result(dx)
+        real(real32), intent(in) :: x(:)
+        real(real32)             :: dx(size(x))
+        integer(int32)           :: n
+
+        n = size(x)
+	dx(1) = x(2) - x(n)
+	dx(n) = x(1) - x(n-1)
+        dx(2:n-1) = x(3:n) - x(1:n-2)
+        dx = 0.5 * dx
+    end function diff_centred_periodic
+
     pure function diff_centred(x) result(dx)
 	! warning only calculated for interior points,
 	! use halo-swap for halo points
@@ -38,15 +50,26 @@ module mod_diff
         dx = 0.5 * dx
     end function diff_centred
 
-    pure function diff_centred_periodic(x) result(dx)
-        real(real32), intent(in) :: x(:)
-        real(real32)             :: dx(size(x))
+    pure function diffx(x) result(dx)
+        real(real32), intent(in) :: x(:,:)
+        real(real32)             :: dx(size(x, dim=1), size(x, dim=2))
         integer(int32)           :: n
 
-        n = size(x)
-	dx(1) = x(2) - x(n)
-	dx(n) = x(1) - x(n-1)
-        dx(2:n-1) = x(3:n) - x(1:n-2)
+        n = size(x, dim=1)
+	dx = 0
+        dx(2:n-1,:) = x(3:n,:) - x(1:n-2,:)
         dx = 0.5 * dx
-    end function diff_centred_periodic
+    end function diffx
+
+    pure function diffy(x) result(dy)
+        real(real32), intent(in) :: x(:,:)
+        real(real32)             :: dy(size(x, dim=1), size(x, dim=2))
+        integer(int32)           :: n
+
+        n = size(x, dim=2)
+	dy = 0
+        dy(:,2:n-1) = x(:,3:n) - x(:,1:n-2)
+        dy = 0.5 * dy
+    end function diffy
+
 end module mod_diff
