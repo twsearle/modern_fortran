@@ -2,6 +2,9 @@ cmake_minimum_required (VERSION 2.8.11)
 enable_language(Fortran)
 
 SET(CMAKE_FC_COMPILER /usr/local/bin/caf)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/Modules)
+
+find_package(Coarray REQUIRED)
 
 # project name
 project (tsunami)
@@ -19,8 +22,9 @@ add_executable("tsunami" "main.f90")
 # add library
 add_library(mod_diff "mod_diff.f90")
 add_library(mod_initial "mod_initial.f90")
+add_library(mod_tiles "mod_tiles.f90")
 
-target_link_libraries(tsunami PUBLIC mod_diff mod_initial)
+target_link_libraries(tsunami PUBLIC mod_diff mod_initial mod_tiles)
 
 install (TARGETS "tsunami"
          RUNTIME DESTINATION "bin")

@@ -17,7 +17,7 @@ module mod_initial
 
         integer(int32)                 :: i
 
-        do concurrent (i = 1:size(x))
+        do i = 1, size(x)
             x(i) = exp(-decay * (i - icenter)**2)
         end do
 
